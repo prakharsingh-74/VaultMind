@@ -196,7 +196,7 @@ export async function generateSimulatedAnswer(
   
   if (citations.length === 0) {
     return {
-      answer: `I could not find any memories or files in the **${spaceName}** space related to your query. Try adding some client notes or documents first.`,
+      answer: `I could not find any memories or files in the ${spaceName} space related to your query. Try adding some client notes or documents first.`,
       citations: []
     };
   }
@@ -217,13 +217,13 @@ Always refer to sources as [Source 1], [Source 2], etc. where appropriate.`;
 
   try {
     const answer = await callLLM(settings, systemPrompt, userPrompt);
-    return { answer, citations };
+    return { answer: answer.replace(/\*/g, ''), citations };
   } catch (error: any) {
     // Elegant fallback if Ollama/API key fails
     console.warn('LLM call failed, falling back to local text synthesis:', error);
     
     // Construct a beautiful mock synthesis response
-    const mockAnswer = `[Simulated Local Engine] (Note: API call to ${settings.llmProvider} failed: ${error.message})\n\nHere is a local synthesis of your memories in **${spaceName}**:\n\n` +
+    const mockAnswer = `[Simulated Local Engine] (Note: API call to ${settings.llmProvider} failed: ${error.message})\n\nHere is a local synthesis of your memories in ${spaceName}:\n\n` +
       citations.map((c, idx) => {
         const sentences = c.rawText.split(/[.!?]+/).filter(s => s.trim().length > 10);
         const snippet = sentences[0] ? sentences[0].trim() + '.' : c.rawText.slice(0, 100) + '...';
@@ -232,7 +232,7 @@ Always refer to sources as [Source 1], [Source 2], etc. where appropriate.`;
       `\n\nTo enable fully conversational AI answers, ensure your configured LLM (currently ${settings.llmProvider.toUpperCase()}) is active and your API key or connection is valid.`;
 
     return {
-      answer: mockAnswer,
+      answer: mockAnswer.replace(/\*/g, ''),
       citations
     };
   }

@@ -279,7 +279,7 @@ export async function querySpace(
 
     if (citations.length === 0) {
       return {
-        answer: `I searched Supermemory Local for the space **${space.name}** but found no relevant memories or documents for "${query}".`,
+        answer: `I searched Supermemory Local for the space ${space.name} but found no relevant memories or documents for "${query}".`,
         citations: []
       };
     }
@@ -300,14 +300,14 @@ Always refer to sources as [Source 1], [Source 2], etc. where appropriate.`;
 
     // Call the LLM (OpenAI, Gemini, Anthropic, or Ollama) using the scoped HTTP fetch
     const answer = await callLLM(settings, systemPrompt, userPrompt);
-    return { answer, citations };
+    return { answer: answer.replace(/\*/g, ''), citations };
 
   } catch (error: any) {
     console.error('Live Supermemory search/chat failed, falling back:', error);
     // If Live server is down, we fall back to our local mock simulation of search & generation
     const fallbackAnswer = await generateSimulatedAnswer(space.containerTag, space.name, query, settings);
     return {
-      answer: `[Supermemory Connection Failed - Fallback Answer]\n\n${fallbackAnswer.answer}`,
+      answer: `[Supermemory Connection Failed - Fallback Answer]\n\n${fallbackAnswer.answer.replace(/\*/g, '')}`,
       citations: fallbackAnswer.citations
     };
   }
