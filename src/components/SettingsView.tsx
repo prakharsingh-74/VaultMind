@@ -260,8 +260,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
 
           {/* Cloud LLM Warning banner */}
           {settings.llmProvider !== 'ollama' && (
-            <div className="p-4 rounded-lg bg-amber-950/20 border border-amber-900/50 flex gap-3 text-xs text-amber-300 leading-relaxed shadow-sm">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
+            <div className="p-4 rounded-lg badge-warning flex gap-3 text-xs leading-relaxed shadow-sm">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold block mb-0.5">⚠️ Data Privacy Warning: NDA Extraction Compliance</span>
                 Memory extraction and summarization will send prompt details to **{settings.llmProvider.toUpperCase()}**'s cloud API. While your vector database embeddings are isolated locally on your device (using containerTag boundaries), generative context processing will transit the local perimeter. Ensure your client NDA contracts permit corporate enterprise integrations with {settings.llmProvider.toUpperCase()}.

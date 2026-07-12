@@ -1,21 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @import "tailwindcss";
 
+:root {
+  /* Base surfaces — charcoal, not pure black/white */
+  --bg-canvas: #14161A;
+  --bg-surface: #1C1F24;
+  --bg-surface-raised: #23262C;
+  --border-hairline: #2E323A;
+
+  /* Text — near-white/gray, never pure white on pure black */
+  --text-primary: #EDEEF0;
+  --text-secondary: #9AA0AC;
+  --text-tertiary: #6B7280;
+
+  /* Status badges — SOLID fill + light text, never tint-on-tint */
+  --status-success-bg: #1F5E43;
+  --status-success-text: #D9F5E5;
+  --status-danger-bg: #6B2632;
+  --status-danger-text: #F7D9DE;
+  --status-warning-bg: #6B4E1F;
+  --status-warning-text: #F5E7C9;
+
+  /* Typography */
+  --font-display: 'Source Serif 4', Georgia, serif;   /* client names, headers */
+  --font-body: 'Inter', -apple-system, sans-serif;     /* UI chrome, body */
+  --font-mono: 'IBM Plex Mono', monospace;             /* containerTag values, keys */
+}
+
 @theme {
-  --font-serif: "Lora", "Merriweather", Georgia, serif;
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
   
-  --color-charcoal-950: #0a0a0b;
-  --color-charcoal-900: #121214;
-  --color-charcoal-800: #19191c;
-  --color-charcoal-700: #232329;
-  --color-charcoal-600: #2e2e36;
-  --color-charcoal-500: #42424d;
-  --color-charcoal-400: #6f6f7d;
-  --color-charcoal-300: #9e9eab;
-  --color-charcoal-200: #d1d1db;
-  --color-charcoal-100: #eaeaef;
+  --color-charcoal-950: var(--bg-canvas);
+  --color-charcoal-900: var(--bg-canvas);
+  --color-charcoal-800: var(--bg-surface);
+  --color-charcoal-700: var(--bg-surface-raised);
+  --color-charcoal-600: var(--border-hairline);
+  --color-charcoal-500: var(--text-tertiary);
+  --color-charcoal-400: var(--text-secondary);
+  --color-charcoal-300: var(--text-secondary);
+  --color-charcoal-200: var(--text-primary);
+  --color-charcoal-100: var(--text-primary);
   
   /* Muted space color variants built in */
   --color-client-emerald: #10b981;
@@ -33,21 +60,21 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-charcoal-900);
+  background: var(--bg-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-charcoal-700);
+  background: var(--border-hairline);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-charcoal-500);
+  background: var(--text-tertiary);
 }
 
 /* Custom Base Styles */
 html, body, #root {
-  background-color: var(--color-charcoal-900);
-  color: var(--color-charcoal-100);
-  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-body);
   height: 100%;
   margin: 0;
   padding: 0;
@@ -57,17 +84,42 @@ html, body, #root {
 
 /* Light Theme Variable Overrides */
 .light {
-  --color-charcoal-950: #f9fafb;
-  --color-charcoal-900: #f3f4f6;
-  --color-charcoal-800: #ffffff;
-  --color-charcoal-700: #e5e7eb;
-  --color-charcoal-600: #d1d5db;
-  --color-charcoal-500: #6b7280;
-  --color-charcoal-400: #4b5563;
-  --color-charcoal-300: #374151;
-  --color-charcoal-200: #1f2937;
-  --color-charcoal-100: #111827;
+  --bg-canvas: #F3F4F6;
+  --bg-surface: #FFFFFF;
+  --bg-surface-raised: #E5E7EB;
+  --border-hairline: #D1D5DB;
+
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-tertiary: #9CA3AF;
+
+  --status-success-bg: #1F5E43;
+  --status-success-text: #EDEEF0;
+  --status-danger-bg: #8c1d30;
+  --status-danger-text: #F7D9DE;
+  --status-warning-bg: #805b21;
+  --status-warning-text: #F5E7C9;
 }
+
+/* Status Badge Utilities (SOLID fill + high contrast, never tint-on-tint) */
+.badge-success {
+  background-color: var(--status-success-bg) !important;
+  color: var(--status-success-text) !important;
+  border: 1px solid rgba(31, 94, 67, 0.2) !important;
+}
+
+.badge-danger {
+  background-color: var(--status-danger-bg) !important;
+  color: var(--status-danger-text) !important;
+  border: 1px solid rgba(107, 38, 50, 0.2) !important;
+}
+
+.badge-warning {
+  background-color: var(--status-warning-bg) !important;
+  color: var(--status-warning-text) !important;
+  border: 1px solid rgba(107, 78, 31, 0.2) !important;
+}
+
 
 /* Dynamic CSS Custom Variables based client theme styling */
 .client-border-active {

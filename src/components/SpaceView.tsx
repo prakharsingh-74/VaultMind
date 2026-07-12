@@ -290,7 +290,7 @@ export default function SpaceView({ space, onBack, onOpenAddMemory, timelineVers
                 <p className="text-xs text-charcoal-400 mt-2 leading-relaxed">
                   Ask a question. Answers will be generated **exclusively** from facts and documents indexed inside the <span className="font-semibold text-indigo-400 font-serif">"{space.name}"</span> namespace.
                 </p>
-                <div className="flex items-center gap-1.5 mt-4 text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-900/50 px-3 py-1.5 rounded-lg">
+                <div className="flex items-center gap-1.5 mt-4 text-[10px] px-3 py-1.5 rounded-lg badge-success font-medium">
                   <Lock className="w-3.5 h-3.5" />
                   <span>Isolation enforced at the database level</span>
                 </div>
@@ -397,7 +397,7 @@ export default function SpaceView({ space, onBack, onOpenAddMemory, timelineVers
               </div>
               <div className="space-y-1">
                 <div className="text-[10px] text-charcoal-400 uppercase tracking-wide">Active containerTag:</div>
-                <div className="text-xs font-mono bg-charcoal-950/80 border border-charcoal-800 rounded px-2.5 py-1 text-indigo-300 select-all truncate">
+                <div className="text-xs font-mono bg-charcoal-700 border border-charcoal-600 rounded px-2.5 py-1 text-charcoal-100 select-all truncate">
                   {space.containerTag}
                 </div>
               </div>
@@ -416,7 +416,7 @@ export default function SpaceView({ space, onBack, onOpenAddMemory, timelineVers
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
                       <span className="font-serif text-charcoal-300 truncate">{s.name}</span>
                     </div>
-                    <span className="text-[10px] text-red-400 font-medium px-2 py-0.5 bg-red-950/20 border border-red-900/30 rounded">
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded badge-danger uppercase tracking-wider">
                       Inaccessible
                     </span>
                   </div>
@@ -488,32 +488,46 @@ export default function SpaceView({ space, onBack, onOpenAddMemory, timelineVers
                 {(proofResultActive || proofResultOther) && (
                   <div className="grid grid-cols-2 gap-2 mt-4">
                     {/* Active Space */}
-                    <div className="border border-indigo-500/20 bg-indigo-950/10 p-2.5 rounded-lg flex flex-col justify-between">
+                    <div className="border border-charcoal-600 bg-charcoal-800 p-2.5 rounded-lg flex flex-col justify-between">
                       <div>
-                        <div className="text-[9px] font-bold text-indigo-400 uppercase tracking-wider truncate mb-1">
+                        <div className="text-[10px] font-bold text-charcoal-300 uppercase tracking-wider truncate mb-1">
                           {space.name} (Active)
                         </div>
-                        <p className="text-[11px] text-charcoal-300 leading-normal line-clamp-5 whitespace-pre-wrap select-text">
+                        <p className="text-[11px] text-charcoal-200 leading-normal line-clamp-5 whitespace-pre-wrap select-text">
                           {proofResultActive?.answer || 'Awaiting response...'}
                         </p>
                       </div>
-                      <div className="text-[9px] text-indigo-400/80 mt-2 border-t border-indigo-900/30 pt-1.5 font-medium">
-                        Citations: {proofResultActive?.count} items
+                      <div className="flex items-center justify-between mt-2 border-t border-charcoal-700/60 pt-1.5">
+                        <div className="text-[10px] text-charcoal-400 font-medium">
+                          Citations: {proofResultActive?.count || 0} items
+                        </div>
+                        {proofResultActive && proofResultActive.count > 0 && (
+                          <span className="text-[8px] font-bold px-1.5 py-0.5 rounded badge-success uppercase tracking-wider">
+                            Grounded
+                          </span>
+                        )}
                       </div>
                     </div>
 
                     {/* Compare Space */}
-                    <div className="border border-red-500/20 bg-red-950/10 p-2.5 rounded-lg flex flex-col justify-between">
+                    <div className="border border-charcoal-600 bg-charcoal-800 p-2.5 rounded-lg flex flex-col justify-between">
                       <div>
-                        <div className="text-[9px] font-bold text-red-400 uppercase tracking-wider truncate mb-1">
+                        <div className="text-[10px] font-bold text-charcoal-300 uppercase tracking-wider truncate mb-1">
                           {otherSpaces.find(s => s.id === selectedProofSpace)?.name}
                         </div>
-                        <p className="text-[11px] text-charcoal-300 leading-normal line-clamp-5 whitespace-pre-wrap select-text">
+                        <p className="text-[11px] text-charcoal-200 leading-normal line-clamp-5 whitespace-pre-wrap select-text">
                           {proofResultOther?.answer || 'Awaiting response...'}
                         </p>
                       </div>
-                      <div className="text-[9px] text-red-400/80 mt-2 border-t border-red-900/30 pt-1.5 font-medium">
-                        Citations: {proofResultOther?.count} items
+                      <div className="flex items-center justify-between mt-2 border-t border-charcoal-700/60 pt-1.5">
+                        <div className="text-[10px] text-charcoal-400 font-medium">
+                          Citations: {proofResultOther?.count || 0} items
+                        </div>
+                        {proofResultOther && proofResultOther.count === 0 && (
+                          <span className="text-[8px] font-bold px-1.5 py-0.5 rounded badge-success uppercase tracking-wider animate-pulse">
+                            100% Isolated
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>

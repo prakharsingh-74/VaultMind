@@ -42,13 +42,13 @@ export default function App() {
   if (securityViolation) {
     return (
       <div className="h-screen w-screen flex flex-col items-center justify-center bg-charcoal-900 text-charcoal-100 p-6">
-        <div className="max-w-md w-full bg-red-950/20 border border-red-900/50 p-6 rounded-2xl flex flex-col items-center gap-4 text-center shadow-lg">
-          <AlertTriangle className="w-12 h-12 text-red-500 animate-pulse" />
-          <h2 className="font-serif text-lg font-bold text-red-200">Zero-Cloud Security Violation</h2>
-          <p className="text-xs text-charcoal-400 leading-relaxed">
+        <div className="max-w-md w-full badge-danger p-6 rounded-2xl flex flex-col items-center gap-4 text-center shadow-lg">
+          <AlertTriangle className="w-12 h-12 text-[var(--status-danger-text)] animate-pulse" />
+          <h2 className="font-serif text-lg font-bold text-[var(--status-danger-text)]">Zero-Cloud Security Violation</h2>
+          <p className="text-xs text-[var(--status-danger-text)] opacity-90 leading-relaxed">
             {securityViolation}
           </p>
-          <div className="text-[10px] text-charcoal-500 uppercase tracking-widest mt-2 border-t border-charcoal-800/80 pt-3 w-full">
+          <div className="text-[10px] uppercase tracking-widest mt-2 border-t border-[rgba(255,255,255,0.1)] pt-3 w-full opacity-85">
             Vaultmind Security Guard Active
           </div>
         </div>
