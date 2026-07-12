@@ -1,51 +1,72 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useState } from 'react';
+import Dashboard from './components/Dashboard';
+import SpaceView from './components/SpaceView';
+import ComplianceView from './components/ComplianceView';
+import SettingsView from './components/SettingsView';
+import MemoryCaptureModal from './components/MemoryCaptureModal';
+import { ClientSpace } from './types';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+type ViewState = 'dashboard' | 'space' | 'compliance' | 'settings';
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+export default function App() {
+  const [view, setView] = useState<ViewState>('dashboard');
+  const [activeSpace, setActiveSpace] = useState<ClientSpace | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [timelineVersion, setTimelineVersion] = useState(0);
+
+  const handleSelectSpace = (space: ClientSpace) => {
+    setActiveSpace(space);
+    setView('space');
+  };
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+    <div
+      style={{
+        '--client-accent': activeSpace ? activeSpace.color : 'transparent'
+      } as React.CSSProperties}
+      className={`h-screen w-screen flex flex-col overflow-hidden bg-charcoal-900 text-charcoal-100 select-none ${
+        activeSpace ? 'active-border-frame transition-all-300' : ''
+      }`}
+    >
+      {/* View router */}
+      <div className="flex-1 overflow-hidden">
+        {view === 'dashboard' && (
+          <Dashboard
+            onSelectSpace={handleSelectSpace}
+            onNavigateToCompliance={() => setView('compliance')}
+            onNavigateToSettings={() => setView('settings')}
+          />
+        )}
+        
+        {view === 'space' && activeSpace && (
+          <SpaceView
+            space={activeSpace}
+            onBack={() => {
+              setView('dashboard');
+              setActiveSpace(null);
+            }}
+            onOpenAddMemory={() => setShowAddModal(true)}
+            timelineVersion={timelineVersion}
+          />
+        )}
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {view === 'compliance' && (
+          <ComplianceView onBack={() => setView('dashboard')} />
+        )}
+
+        {view === 'settings' && (
+          <SettingsView onBack={() => setView('dashboard')} />
+        )}
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+      {/* Memory Capture Modal */}
+      {showAddModal && activeSpace && (
+        <MemoryCaptureModal
+          space={activeSpace}
+          onClose={() => setShowAddModal(false)}
+          onSuccess={() => setTimelineVersion(prev => prev + 1)}
         />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      )}
+    </div>
   );
 }
-
-export default App;
