@@ -1,5 +1,5 @@
 import { MemoryEntry, AppSettings } from '../types';
-import { fetch } from '@tauri-apps/plugin-http';
+import { safeFetch as fetch } from './safeFetch';
 
 // Local storage keys for simulation
 const MOCK_DB_PREFIX = 'vaultmind_sim_db_';
@@ -97,7 +97,7 @@ export async function callLLM(settings: AppSettings, systemPrompt: string, userP
       throw new Error(`OpenAI Error: ${response.status} - ${errText}`);
     }
     const json: any = await response.json();
-    return json.choices[0].message.content || '';
+    return json?.choices?.[0]?.message?.content || '';
   }
   
   if (provider === 'gemini') {
@@ -174,7 +174,7 @@ export async function callLLM(settings: AppSettings, systemPrompt: string, userP
       throw new Error(`Ollama local instance not responding. Make sure Ollama is running on ${settings.ollamaUrl}.`);
     }
     const json: any = await response.json();
-    return json.message?.content || '';
+    return json?.message?.content || '';
   }
 
   throw new Error('Unsupported LLM provider.');

@@ -1,6 +1,6 @@
 import { ClientSpace, MemoryEntry, AuditLogEntry, AppSettings, MemorySourceType } from '../types';
 import { addSimMemory, generateSimulatedAnswer, getSimMemories, callLLM } from './supermemoryMock';
-import { fetch } from '@tauri-apps/plugin-http';
+import { safeFetch as fetch } from './safeFetch';
 
 const SPACES_KEY = 'vaultmind_client_spaces';
 const AUDIT_KEY = 'vaultmind_audit_log';

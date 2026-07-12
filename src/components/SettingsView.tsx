@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Settings, Shield, Server, Key, AlertTriangle, ArrowLeft, RefreshCw, Check } from 'lucide-react';
 import { AppSettings, LLMProvider, AppMode } from '../types';
 import { getSettings, saveSettings, logAuditAction } from '../services/spaceRouter';
+import { safeFetch as fetch } from '../services/safeFetch';
 
 interface SettingsViewProps {
   onBack: () => void;
