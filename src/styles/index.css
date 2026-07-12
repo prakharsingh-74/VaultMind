@@ -89,15 +89,16 @@ html, body, #root {
 }
 
 .glass-panel {
-  background: rgba(25, 25, 28, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(46, 46, 54, 0.6);
+  background: var(--color-charcoal-800);
+  border: 1px solid var(--color-charcoal-700);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 
 .glass-panel-hover:hover {
-  background: rgba(35, 35, 41, 0.85);
+  background: var(--color-charcoal-800);
   border-color: var(--client-accent, rgba(99, 102, 241, 0.6));
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
 }
 
 .active-border-frame {
