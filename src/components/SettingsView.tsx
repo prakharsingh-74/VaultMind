@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Settings, Shield, Server, Key, AlertTriangle, ArrowLeft, RefreshCw, Check } from 'lucide-react';
+import { Settings, Shield, Server, Key, AlertTriangle, ArrowLeft, RefreshCw, Check, Sun, Moon } from 'lucide-react';
 import { AppSettings, LLMProvider, AppMode } from '../types';
 import { getSettings, saveSettings, logAuditAction } from '../services/spaceRouter';
 import { safeFetch as fetch } from '../services/safeFetch';
@@ -37,11 +37,21 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     setSettings(next);
   };
 
+  const handleThemeChange = (theme: 'dark' | 'light') => {
+    const next = { ...settings, theme };
+    handleSave(next);
+    // Apply theme class to document element instantly
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  };
+
   const testSupermemoryConnection = async () => {
     setTestStatus('testing');
     setTestError('');
     try {
-      // Fetch documents page or simply do a basic check
       const res = await fetch(`${settings.supermemoryUrl}/v4/search`, {
         method: 'POST',
         headers: {
@@ -63,28 +73,58 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   };
 
   return (
-    <div className="h-full flex flex-col overflow-y-auto px-8 py-10 max-w-3xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-10 border-b border-charcoal-700 pb-5">
-        <button
-          onClick={onBack}
-          className="p-2 hover:bg-charcoal-800 rounded-lg text-charcoal-300 hover:text-charcoal-100 transition"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <h1 className="font-serif text-2xl font-semibold text-charcoal-100 flex items-center gap-2.5">
-            <Settings className="w-6 h-6 text-indigo-400" />
-            System Preferences
-          </h1>
-          <p className="text-charcoal-400 text-xs mt-1">
-            Configure local boundary runtimes, server configurations, and LLM providers.
-          </p>
+    <div className="h-full flex flex-col overflow-hidden px-8 py-6 max-w-4xl mx-auto w-full">
+      {/* Header - Fixed Height */}
+      <div className="flex items-center justify-between mb-6 border-b border-charcoal-700 pb-5 shrink-0">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onBack}
+            className="p-2 hover:bg-charcoal-800 rounded-lg text-charcoal-300 hover:text-charcoal-100 transition cursor-pointer"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h1 className="font-serif text-2xl font-semibold text-charcoal-100 flex items-center gap-2.5">
+              <Settings className="w-6 h-6 text-indigo-400" />
+              System Preferences
+            </h1>
+            <p className="text-charcoal-400 text-xs mt-1">
+              Configure local boundary runtimes, server configurations, and LLM providers.
+            </p>
+          </div>
+        </div>
+
+        {/* Premium Light/Dark Theme Segment Switch */}
+        <div className="flex items-center gap-1 bg-charcoal-900 border border-charcoal-700/80 p-1 rounded-xl shadow-inner">
+          <button
+            type="button"
+            onClick={() => handleThemeChange('dark')}
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              settings.theme !== 'light'
+                ? 'bg-charcoal-800 text-indigo-400 border border-charcoal-700 shadow-sm'
+                : 'text-charcoal-400 hover:text-charcoal-200'
+            }`}
+          >
+            <Moon className="w-3.5 h-3.5" />
+            Dark
+          </button>
+          <button
+            type="button"
+            onClick={() => handleThemeChange('light')}
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              settings.theme === 'light'
+                ? 'bg-charcoal-800 text-indigo-500 border border-charcoal-700 shadow-sm'
+                : 'text-charcoal-400 hover:text-charcoal-200'
+            }`}
+          >
+            <Sun className="w-3.5 h-3.5" />
+            Light
+          </button>
         </div>
       </div>
 
-      <div className="space-y-8">
-        
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-y-auto pr-3 space-y-6 scrollbar-thin">
         {/* Section 1: Execution Mode */}
         <div className="space-y-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-charcoal-300 flex items-center gap-2">
@@ -95,9 +135,9 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => handleModeChange('mock')}
-              className={`p-4 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between h-32 ${
+              className={`p-4 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between h-28 ${
                 settings.mode === 'mock'
-                  ? 'bg-indigo-950/10 border-indigo-500 text-indigo-200'
+                  ? 'bg-indigo-950/10 border-indigo-500 text-indigo-200 shadow-md shadow-indigo-950/5'
                   : 'bg-charcoal-800/40 border-charcoal-700 text-charcoal-400 hover:border-charcoal-600'
               }`}
             >
@@ -107,14 +147,14 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   No local server needed. Generates answers client-side with keyword similarity lookup. Perfect for instant offline demos.
                 </p>
               </div>
-              {settings.mode === 'mock' && <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Active</span>}
+              {settings.mode === 'mock' && <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mt-2 block">Active</span>}
             </button>
 
             <button
               onClick={() => handleModeChange('live')}
-              className={`p-4 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between h-32 ${
+              className={`p-4 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between h-28 ${
                 settings.mode === 'live'
-                  ? 'bg-indigo-950/10 border-indigo-500 text-indigo-200'
+                  ? 'bg-indigo-950/10 border-indigo-500 text-indigo-200 shadow-md shadow-indigo-950/5'
                   : 'bg-charcoal-800/40 border-charcoal-700 text-charcoal-400 hover:border-charcoal-600'
               }`}
             >
@@ -124,14 +164,14 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   Connects to a running Supermemory Local binary on port 6767. Utilizes native vector embeddings and isolated namespaces.
                 </p>
               </div>
-              {settings.mode === 'live' && <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Active</span>}
+              {settings.mode === 'live' && <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mt-2 block">Active</span>}
             </button>
           </div>
         </div>
 
         {/* Section 2: Supermemory Local Configuration */}
         {settings.mode === 'live' && (
-          <div className="space-y-4 border-t border-charcoal-700/60 pt-6">
+          <div className="space-y-4 border-t border-charcoal-700 pt-5">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-charcoal-300 flex items-center gap-2">
               <Server className="w-4 h-4 text-indigo-400" />
               Supermemory Local Endpoint
@@ -165,7 +205,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 type="button"
                 onClick={testSupermemoryConnection}
                 disabled={testStatus === 'testing'}
-                className="px-3.5 py-1.5 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 border border-charcoal-600 rounded text-xs transition flex items-center gap-1.5"
+                className="px-3.5 py-1.5 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 border border-charcoal-600 rounded text-xs transition flex items-center gap-1.5 cursor-pointer"
               >
                 {testStatus === 'testing' ? (
                   <>
@@ -183,7 +223,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 </span>
               )}
               {testStatus === 'failed' && (
-                <span className="text-xs text-red-400">
+                <span className="text-xs text-red-400 font-medium">
                   Connection failed: {testError}
                 </span>
               )}
@@ -192,7 +232,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         )}
 
         {/* Section 3: LLM Provider */}
-        <div className="space-y-4 border-t border-charcoal-700/60 pt-6">
+        <div className="space-y-4 border-t border-charcoal-700 pt-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-charcoal-300 flex items-center gap-2">
             <Key className="w-4 h-4 text-indigo-400" />
             AI Synthesis LLM Provider
@@ -206,7 +246,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 onClick={() => handleProviderChange(p)}
                 className={`py-2 text-xs rounded-lg border font-medium transition cursor-pointer ${
                   settings.llmProvider === p
-                    ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
+                    ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300 shadow-sm'
                     : 'bg-charcoal-900/40 border-charcoal-700 text-charcoal-400 hover:border-charcoal-600'
                 }`}
               >
@@ -220,7 +260,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
 
           {/* Cloud LLM Warning banner */}
           {settings.llmProvider !== 'ollama' && (
-            <div className="p-4 rounded-lg bg-amber-950/20 border border-amber-900/50 flex gap-3 text-xs text-amber-300 leading-relaxed">
+            <div className="p-4 rounded-lg bg-amber-950/20 border border-amber-900/50 flex gap-3 text-xs text-amber-300 leading-relaxed shadow-sm">
               <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
               <div>
                 <span className="font-semibold block mb-0.5">⚠️ Data Privacy Warning: NDA Extraction Compliance</span>
@@ -271,24 +311,23 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             )}
           </div>
         </div>
+      </div>
 
-        {/* Section 4: Manual Save Button (if modified manually) */}
-        <div className="pt-4 border-t border-charcoal-700/60 flex justify-end gap-3">
-          <button
-            onClick={() => handleSave(settings)}
-            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition flex items-center gap-1.5 cursor-pointer"
-          >
-            {isSaved ? (
-              <>
-                <Check className="w-4 h-4" />
-                Settings Saved
-              </>
-            ) : (
-              'Save Configuration'
-            )}
-          </button>
-        </div>
-
+      {/* Footer - Fixed Height Action Bar */}
+      <div className="mt-5 border-t border-charcoal-700 pt-4 flex justify-end shrink-0">
+        <button
+          onClick={() => handleSave(settings)}
+          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-950/20"
+        >
+          {isSaved ? (
+            <>
+              <Check className="w-4 h-4" />
+              Settings Saved
+            </>
+          ) : (
+            'Save Configuration'
+          )}
+        </button>
       </div>
     </div>
   );

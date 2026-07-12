@@ -40,4 +40,5 @@ export interface AppSettings {
   llmApiKey: string;
   ollamaUrl: string;
   ollamaModel: string;
+  theme?: 'dark' | 'light';
 }

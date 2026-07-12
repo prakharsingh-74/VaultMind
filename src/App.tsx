@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import SpaceView from './components/SpaceView';
 import ComplianceView from './components/ComplianceView';
 import SettingsView from './components/SettingsView';
 import MemoryCaptureModal from './components/MemoryCaptureModal';
 import { ClientSpace } from './types';
+import { getSettings } from './services/spaceRouter';
 
 type ViewState = 'dashboard' | 'space' | 'compliance' | 'settings';
 
@@ -13,6 +14,16 @@ export default function App() {
   const [activeSpace, setActiveSpace] = useState<ClientSpace | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [timelineVersion, setTimelineVersion] = useState(0);
+
+  // Load and apply the saved theme mode on boot
+  useEffect(() => {
+    const settings = getSettings();
+    if (settings.theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, []);
 
   const handleSelectSpace = (space: ClientSpace) => {
     setActiveSpace(space);

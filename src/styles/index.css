@@ -33,25 +33,40 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #121214;
+  background: var(--color-charcoal-900);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2e2e36;
+  background: var(--color-charcoal-700);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #42424d;
+  background: var(--color-charcoal-500);
 }
 
 /* Custom Base Styles */
 html, body, #root {
-  background-color: #121214;
-  color: #eaeaef;
+  background-color: var(--color-charcoal-900);
+  color: var(--color-charcoal-100);
   font-family: var(--font-sans);
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Light Theme Variable Overrides */
+.light {
+  --color-charcoal-950: #f9fafb;
+  --color-charcoal-900: #f3f4f6;
+  --color-charcoal-800: #ffffff;
+  --color-charcoal-700: #e5e7eb;
+  --color-charcoal-600: #d1d5db;
+  --color-charcoal-500: #6b7280;
+  --color-charcoal-400: #4b5563;
+  --color-charcoal-300: #374151;
+  --color-charcoal-200: #1f2937;
+  --color-charcoal-100: #111827;
 }
 
 /* Dynamic CSS Custom Variables based client theme styling */
