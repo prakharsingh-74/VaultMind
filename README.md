@@ -16,41 +16,91 @@ VaultMind is a local-first, zero-cloud desktop application built with **Tauri, R
 ---
 
 ## 🛠️ Tech Stack
-*   **Frontend**: React, TypeScript, Tailwind CSS, Lucide icons
+*   **Frontend**: React (Vite), TypeScript, Tailwind CSS, Lucide icons
 *   **Desktop Wrapper**: Tauri (Rust backend wrapping native system WebViews)
 *   **Local DB & Graph Engine**: Supermemory Local (vector and knowledge search)
 *   **Local LLM Integration**: Ollama (Llama 3/3.1 default, fully local)
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Setup & Installation Guide
+
+Follow these steps to set up the project locally:
 
 ### 1. Prerequisites
 Ensure you have the following installed on your host system:
 *   [Node.js](https://nodejs.org/) (v18+)
-*   [Rust & Cargo](https://www.rust-lang.org/tools/install) (for Tauri compilation)
-*   [Ollama](https://ollama.com/) (running locally on port `11434`)
-*   [Supermemory Server](https://github.com/supermemoryai/supermemory) (running locally on port `6767`)
+*   [Rust & Cargo](https://www.rust-lang.org/tools/install) (required for compiling the Tauri Rust wrapper)
 
-### 2. Sandbox Setup (Outbound Telemetry Block)
-To ensure complete offline isolation and prevent analytics leaks, add the following to your system host files:
+---
+
+### 2. Setting Up Ollama (Local LLM)
+Ollama runs LLMs locally on your machine. You can install it on Windows via PowerShell or manual installer:
+
+#### Quick Installation via PowerShell
+Open PowerShell as an Administrator and run:
+```powershell
+irm https://ollama.com/install.ps1 | iex
+```
+
+#### Manual Installation
+1. Download the installer from the [Official Ollama Website](https://ollama.com/download/windows).
+2. Run the installer to completion.
+3. Ollama will start automatically in your Windows taskbar tray.
+
+#### Pulling the Default Model
+After installing, pull the default Llama 3 model (ensure Ollama is running in the background):
+```powershell
+ollama pull llama3
+```
+To verify that the Ollama service is active offline, open `http://localhost:11434` in your browser. You should see:
+`Ollama is running`
+
+---
+
+### 3. Setting Up Supermemory Local
+To run the live production vector database locally:
+1. Open your **WSL** (Windows Subsystem for Linux) terminal.
+2. Start the local server by running:
+   ```bash
+   npx supermemory-local
+   ```
+3. This command will initialize the local database, start the server on port `6767`, and generate your API Key.
+4. Copy the generated API key and local endpoint URL (`http://localhost:6767`).
+5. Open VaultMind, click on **Settings** (System Preferences), set the execution mode to **Live Supermemory Local Mode**, paste your API Key and URL, then click **Save Configuration**.
+*(Note: VaultMind will automatically fallback to its built-in Offline Simulation Mode if the Supermemory local server is not running or disconnected, allowing continuous operations.)*
+
+---
+
+### 4. Sandbox Security (Outbound Telemetry Block)
+To ensure complete offline isolation and prevent analytics leaks, add the following to your system `hosts` file:
 ```hosts
 127.0.0.1 us.i.posthog.com
 ```
 
-### 3. Installation & Run
-Clone the repository, install node modules, and run the Tauri developer environment:
+---
+
+### 5. Running & Building the App
+
+#### Install Dependencies
+Navigate to the root of the project and run:
 ```bash
-# Clone the repository
-git clone <your-repo-link>
-cd vaultmind
-
-# Install dependencies
 npm install
+```
 
-# Run the Tauri application in developer mode
+#### Launch Developer Mode
+Run the developer hot-reloading environment:
+```bash
 npm run tauri dev
 ```
+
+#### Compile and Build the Production Installer
+To bundle VaultMind into a standalone Windows desktop executable (`.msi` or `.exe` installer):
+```bash
+npm run tauri build
+```
+Once the build is complete, your installers will be generated under:
+`src-tauri/target/release/bundle/msi/`
 
 ---
 
