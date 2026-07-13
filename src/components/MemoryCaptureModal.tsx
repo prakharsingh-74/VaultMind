@@ -232,13 +232,13 @@ export default function MemoryCaptureModal({ space, onClose, onSuccess }: Memory
             onClick={() => setIsConfirmed(!isConfirmed)}
             className={`p-3.5 rounded-lg border flex gap-3 items-start cursor-pointer transition ${
               isConfirmed
-                ? 'bg-indigo-950/15 border-indigo-500/40 text-indigo-200'
-                : 'bg-charcoal-900/40 border-charcoal-700/50 text-charcoal-400 hover:border-charcoal-600'
+                ? 'bg-charcoal-700 border-indigo-500/60 text-charcoal-100'
+                : 'bg-charcoal-900/40 border-charcoal-700/50 text-charcoal-300 hover:border-charcoal-500'
             }`}
           >
             <CheckSquare className={`w-4 h-4 mt-0.5 shrink-0 transition ${isConfirmed ? 'text-indigo-400' : 'text-charcoal-500'}`} />
             <div className="text-xs leading-normal select-none">
-              <span className="font-semibold text-charcoal-200">Confirm Client Boundary Allocation:</span> I verify that this data belongs to <span className="font-serif font-bold text-indigo-400">"{space.name}"</span> and is explicitly bound to container tag <span className="font-mono bg-charcoal-900 px-1 py-0.5 rounded text-[10px]">{space.containerTag}</span>. It must not be co-mingled.
+              <span className="font-semibold text-charcoal-100">Confirm Client Boundary Allocation:</span> I verify that this data belongs to <span className="font-serif font-bold" style={{ color: space.color }}>"{space.name}"</span> and is explicitly bound to container tag <span className="font-mono bg-charcoal-900 border border-charcoal-700/80 px-1 py-0.5 rounded text-[10px] text-charcoal-200">{space.containerTag}</span>. It must not be co-mingled.
             </div>
           </div>
 
