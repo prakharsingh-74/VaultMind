@@ -43,4 +43,5 @@ export interface AppSettings {
   theme?: 'dark' | 'light';
   panicLockPinHash?: string;
   panicShortcut?: string;
+  panicIdleTimeout?: number;
 }

@@ -78,6 +78,40 @@ export default function App() {
     };
   }, []);
 
+  // Idle Auto-Lock Timer
+  useEffect(() => {
+    if (isLocked) return;
+
+    const settings = getSettings();
+    const timeoutMin = settings.panicIdleTimeout !== undefined ? settings.panicIdleTimeout : 7;
+    if (timeoutMin <= 0) return;
+
+    const timeoutMs = timeoutMin * 60 * 1000;
+    let timerId: any;
+
+    const resetTimer = () => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        setIsLocked(true);
+        logAuditAction('app_locked', undefined, undefined, `Panic Lock triggered automatically due to ${timeoutMin} minutes of inactivity`);
+      }, timeoutMs);
+    };
+
+    const events = ['mousemove', 'keydown', 'mousedown', 'scroll', 'touchstart'];
+    events.forEach(event => {
+      window.addEventListener(event, resetTimer, { passive: true });
+    });
+
+    resetTimer();
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+      events.forEach(event => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [isLocked]);
+
   const handleSelectSpace = (space: ClientSpace) => {
     setActiveSpace(space);
     setView('space');

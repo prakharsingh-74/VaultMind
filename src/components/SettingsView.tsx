@@ -320,26 +320,56 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
           </h3>
 
           <div className="bg-charcoal-900/40 border border-charcoal-800 p-5 rounded-xl">
-            {/* Trigger Shortcut Dropdown */}
-            <div className="space-y-1.5 max-w-md">
-              <label className="text-[10px] text-charcoal-400 uppercase font-semibold">Panic Trigger Keybind</label>
-              <select
-                value={settings.panicShortcut || 'Ctrl+L'}
-                onChange={e => {
-                  const next = { ...settings, panicShortcut: e.target.value };
-                  setSettings(next);
-                  handleSave(next);
-                }}
-                className="w-full bg-charcoal-900 border border-charcoal-700 rounded px-3 py-2 text-sm text-charcoal-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
-              >
-                <option value="Ctrl+L">Ctrl + L (Default)</option>
-                <option value="Ctrl+Shift+L">Ctrl + Shift + L</option>
-                <option value="Ctrl+Shift+K">Ctrl + Shift + K</option>
-                <option value="Alt+Shift+L">Alt + Shift + L</option>
-              </select>
-              <span className="text-[10px] text-charcoal-500 block mt-1 leading-normal">
-                Pressing this key combination instantly blurs and freezes all client spaces. Press it again to de-blur.
-              </span>
+            <div className="grid grid-cols-2 gap-6">
+              
+              {/* Trigger Shortcut Dropdown */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] text-charcoal-400 uppercase font-semibold">Panic Trigger Keybind</label>
+                <select
+                  value={settings.panicShortcut || 'Ctrl+L'}
+                  onChange={e => {
+                    const next = { ...settings, panicShortcut: e.target.value };
+                    setSettings(next);
+                    handleSave(next);
+                  }}
+                  className="w-full bg-charcoal-900 border border-charcoal-700 rounded px-3 py-2 text-sm text-charcoal-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                >
+                  <option value="Ctrl+L">Ctrl + L (Default)</option>
+                  <option value="Ctrl+Shift+L">Ctrl + Shift + L</option>
+                  <option value="Ctrl+Shift+K">Ctrl + Shift + K</option>
+                  <option value="Alt+Shift+L">Alt + Shift + L</option>
+                </select>
+                <span className="text-[10px] text-charcoal-500 block mt-1 leading-normal">
+                  Pressing this key combination instantly blurs and freezes all client spaces. Press it again to de-blur.
+                </span>
+              </div>
+
+              {/* Idle Timeout Selector */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] text-charcoal-400 uppercase font-semibold">Auto-Lock Idle Timeout</label>
+                <select
+                  value={settings.panicIdleTimeout !== undefined ? settings.panicIdleTimeout : 7}
+                  onChange={e => {
+                    const next = { ...settings, panicIdleTimeout: parseInt(e.target.value, 10) };
+                    setSettings(next);
+                    handleSave(next);
+                  }}
+                  className="w-full bg-charcoal-900 border border-charcoal-700 rounded px-3 py-2 text-sm text-charcoal-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                >
+                  <option value="0">Disabled (Manual Only)</option>
+                  <option value="1">1 Minute</option>
+                  <option value="3">3 Minutes</option>
+                  <option value="5">5 Minutes</option>
+                  <option value="7">7 Minutes (Default)</option>
+                  <option value="10">10 Minutes</option>
+                  <option value="15">15 Minutes</option>
+                  <option value="30">30 Minutes</option>
+                </select>
+                <span className="text-[10px] text-charcoal-500 block mt-1 leading-normal">
+                  Automatically blur and freeze the workspace after this duration of system inactivity.
+                </span>
+              </div>
+
             </div>
           </div>
         </div>
