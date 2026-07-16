@@ -1,0 +1,12 @@
+node_modules
+dist
+src-tauri/target
+.git
+.gitignore
+.env
+*.exe
+*.msi
+*.zip
+.tauri
+out
+build
