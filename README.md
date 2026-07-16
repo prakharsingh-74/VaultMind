@@ -110,6 +110,22 @@ To bundle VaultMind into a standalone desktop installer:
     ```
     Once complete, packages are generated under `src-tauri/target/release/bundle/dmg/` and `/macos/`.
 
+#### 🐳 Deploying via Docker (Demo Mode)
+For judges who want to instantly check out VaultMind in a standard web browser without installing system wrappers (Tauri, Rust, or installer packages):
+
+1. Make sure Docker and Docker Compose are installed on your host.
+2. Start the container build and run execution:
+   ```bash
+   docker compose up --build -d
+   ```
+3. Open **`http://localhost:3000`** in your browser.
+4. VaultMind will run natively in browser fallback mode using LocalStorage for configuration database mocks, matching the full functionality of the desktop app.
+
+To stop the container:
+```bash
+docker compose down
+```
+
 ---
 
 ## 🔬 E2E Boundary Verification Walkthrough
