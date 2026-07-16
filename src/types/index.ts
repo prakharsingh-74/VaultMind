@@ -18,7 +18,7 @@ export interface MemoryEntry {
   tags: string[];
 }
 
-export type AuditActionType = 'space_created' | 'memory_added' | 'query_run' | 'space_switched';
+export type AuditActionType = 'space_created' | 'memory_added' | 'query_run' | 'space_switched' | 'app_locked' | 'app_unlocked';
 
 export interface AuditLogEntry {
   id: string;
@@ -41,4 +41,6 @@ export interface AppSettings {
   ollamaUrl: string;
   ollamaModel: string;
   theme?: 'dark' | 'light';
+  panicLockPinHash?: string;
+  panicShortcut?: string;
 }

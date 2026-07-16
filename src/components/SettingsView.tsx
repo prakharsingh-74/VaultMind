@@ -311,6 +311,38 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             )}
           </div>
         </div>
+
+        {/* Section 4: Panic Lock Settings */}
+        <div className="space-y-4 border-t border-charcoal-700 pt-5">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-charcoal-300 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-indigo-400" />
+            Panic Lock Settings
+          </h3>
+
+          <div className="bg-charcoal-900/40 border border-charcoal-800 p-5 rounded-xl">
+            {/* Trigger Shortcut Dropdown */}
+            <div className="space-y-1.5 max-w-md">
+              <label className="text-[10px] text-charcoal-400 uppercase font-semibold">Panic Trigger Keybind</label>
+              <select
+                value={settings.panicShortcut || 'Ctrl+L'}
+                onChange={e => {
+                  const next = { ...settings, panicShortcut: e.target.value };
+                  setSettings(next);
+                  handleSave(next);
+                }}
+                className="w-full bg-charcoal-900 border border-charcoal-700 rounded px-3 py-2 text-sm text-charcoal-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+              >
+                <option value="Ctrl+L">Ctrl + L (Default)</option>
+                <option value="Ctrl+Shift+L">Ctrl + Shift + L</option>
+                <option value="Ctrl+Shift+K">Ctrl + Shift + K</option>
+                <option value="Alt+Shift+L">Alt + Shift + L</option>
+              </select>
+              <span className="text-[10px] text-charcoal-500 block mt-1 leading-normal">
+                Pressing this key combination instantly blurs and freezes all client spaces. Press it again to de-blur.
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Footer - Fixed Height Action Bar */}

@@ -14,7 +14,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   llmProvider: 'ollama',
   llmApiKey: '',
   ollamaUrl: 'http://localhost:11434',
-  ollamaModel: 'llama3'
+  ollamaModel: 'llama3',
+  panicLockPinHash: '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', // SHA-256 hash of "1234"
+  panicShortcut: 'Ctrl+L'
 };
 
 // --- Settings Operations ---

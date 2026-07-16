@@ -4,8 +4,9 @@ import SpaceView from './components/SpaceView';
 import ComplianceView from './components/ComplianceView';
 import SettingsView from './components/SettingsView';
 import MemoryCaptureModal from './components/MemoryCaptureModal';
+import PanicLockOverlay from './components/PanicLockOverlay';
 import { ClientSpace } from './types';
-import { getSettings } from './services/spaceRouter';
+import { getSettings, logAuditAction } from './services/spaceRouter';
 import { AlertTriangle } from 'lucide-react';
 
 type ViewState = 'dashboard' | 'space' | 'compliance' | 'settings';
@@ -16,6 +17,7 @@ export default function App() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [timelineVersion, setTimelineVersion] = useState(0);
   const [securityViolation, setSecurityViolation] = useState<string | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
 
   // Load and apply the saved theme mode on boot
   useEffect(() => {
@@ -32,6 +34,48 @@ export default function App() {
     if (!isLocalhost && settings.mode === 'live') {
       setSecurityViolation(`CRITICAL SECURITY FAILURE: VaultMind is configured to point to a remote Supermemory URL (${url}). Under zero-cloud containment guidelines, only localhost connections are permitted. Boot aborted.`);
     }
+  }, []);
+
+  // Panic Lock Keyboard Interceptor
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const settings = getSettings();
+      const shortcut = settings.panicShortcut || 'Ctrl+L';
+
+      const parts = shortcut.toLowerCase().split('+');
+      const needsCtrl = parts.includes('ctrl');
+      const needsShift = parts.includes('shift');
+      const needsAlt = parts.includes('alt');
+      const needsMeta = parts.includes('cmd') || parts.includes('win') || parts.includes('meta');
+
+      const targetKey = parts.find(p => !['ctrl', 'shift', 'alt', 'cmd', 'win', 'meta'].includes(p));
+      if (!targetKey) return;
+
+      const matchesCtrl = needsCtrl ? (e.ctrlKey || e.metaKey) : !e.ctrlKey;
+      const matchesShift = needsShift ? e.shiftKey : !e.shiftKey;
+      const matchesAlt = needsAlt ? e.altKey : !e.altKey;
+      const matchesMeta = needsMeta ? e.metaKey : !e.metaKey;
+      const matchesKey = e.key.toLowerCase() === targetKey;
+
+      if (matchesKey && matchesCtrl && matchesShift && matchesAlt && matchesMeta) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsLocked(prev => {
+          const next = !prev;
+          if (next) {
+            logAuditAction('app_locked', undefined, undefined, 'Panic Lock activated via keyboard shortcut');
+          } else {
+            logAuditAction('app_unlocked', undefined, undefined, 'Panic Lock deactivated via keyboard shortcut');
+          }
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, { capture: true });
+    };
   }, []);
 
   const handleSelectSpace = (space: ClientSpace) => {
@@ -104,6 +148,9 @@ export default function App() {
           onSuccess={() => setTimelineVersion(prev => prev + 1)}
         />
       )}
+
+      {/* Panic Lock Overlay */}
+      {isLocked && <PanicLockOverlay />}
     </div>
   );
 }
