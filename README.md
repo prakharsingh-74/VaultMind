@@ -12,6 +12,7 @@ VaultMind is a local-first, zero-cloud desktop application built with **Tauri, R
 4. **📊 Side-by-Side Isolation Proof Dashboard**: A diagnostic tool allowing users to execute dual queries across distinct namespaces simultaneously. Displays active grounding status alongside a verified `100% Isolated` badge confirming zero cross-leakage.
 5. **📴 Offline-First Resilience**: If the local database engine process is suspended, VaultMind seamlessly switches to a local mock synthesis layer, allowing editing, pastes, and reading to continue completely off-grid.
 6. **🌓 Premium Design Systems**: Custom-tailored dark and light mode designs matching modern developer tools, featuring glassmorphism cards and smooth interactive micro-animations.
+7. **🚨 Panic Lock & Inactivity Auto-Lock**: Toggle a full-screen glassmorphic blur shield instantly using `Ctrl+L` (or custom hotkey) to obscure confidential files if someone approaches your desk. Configurable to trigger automatically after 1–30 minutes of system inactivity.
 
 ---
 
@@ -95,12 +96,19 @@ npm run tauri dev
 ```
 
 #### Compile and Build the Production Installer
-To bundle VaultMind into a standalone Windows desktop executable (`.msi` or `.exe` installer):
-```bash
-npm run tauri build
-```
-Once the build is complete, your installers will be generated under:
-`src-tauri/target/release/bundle/msi/`
+To bundle VaultMind into a standalone desktop installer:
+
+*   **Windows**: Runs natively on your Windows host:
+    ```bash
+    npm run tauri build
+    ```
+    Once the build is complete, your installers will be generated under:
+    `src-tauri/target/release/bundle/nsis/` (Standard EXE Setup) and `src-tauri/target/release/bundle/msi/` (Enterprise MSI).
+*   **macOS**: Tauri does not support cross-compiling from Windows. Copy this repository to a Mac computer, configure system dependencies, and run:
+    ```bash
+    npm run tauri build
+    ```
+    Once complete, packages are generated under `src-tauri/target/release/bundle/dmg/` and `/macos/`.
 
 ---
 
