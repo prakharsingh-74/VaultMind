@@ -11,8 +11,7 @@ VaultMind is a local-first, zero-cloud desktop application built with **Tauri, R
 3. **🚫 Local Telemetry Sandboxing**: Core configurations automatically sandbox data-tracking networks. Outbound analytics calls to PostHog and other servers fail cleanly at the network perimeter.
 4. **📊 Side-by-Side Isolation Proof Dashboard**: A diagnostic tool allowing users to execute dual queries across distinct namespaces simultaneously. Displays active grounding status alongside a verified `100% Isolated` badge confirming zero cross-leakage.
 5. **📴 Offline-First Resilience**: If the local database engine process is suspended, VaultMind seamlessly switches to a local mock synthesis layer, allowing editing, pastes, and reading to continue completely off-grid.
-6. **🌓 Premium Design Systems**: Custom-tailored dark and light mode designs matching modern developer tools, featuring glassmorphism cards and smooth interactive micro-animations.
-7. **🚨 Panic Lock & Inactivity Auto-Lock**: Toggle a full-screen glassmorphic blur shield instantly using `Ctrl+L` (or custom hotkey) to obscure confidential files if someone approaches your desk. Configurable to trigger automatically after 1–30 minutes of system inactivity.
+6. **🚨 Panic Lock & Inactivity Auto-Lock**: Toggle a full-screen glassmorphic blur shield instantly using `Ctrl+L` (or custom hotkey) to obscure confidential files if someone approaches your desk. Configurable to trigger automatically after 1–30 minutes of system inactivity.
 
 ---
 
